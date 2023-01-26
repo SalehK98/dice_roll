@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+      integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>Dice game</title>
+  </head>
+  <body>
+    <section id="container">
+      <section id="left" class="active">
+        <h1>player 1</h1>
+        <span id="playerOneTotalScore" class="totalScore">50</span>
+        <div class="currentBox">
+          <span class="label">current</span>
+          <span id="playerOneCurrentScore" class="currentScore">11</span>
+        </div>
+      </section>
+      <section id="middle">
+        <button class="btn">
+          <i class="fa-solid fa-gamepad"></i>
+          NEW GAME
+        </button>
+        <img src="./images/dice-1.png" alt="" />
+        <img src="./images/dice-2.png" alt="" />
+        <button class="btn"><i class="fa-solid fa-dice"></i> ROLL DICE</button>
+        <button class="btn"><i class="fa-solid fa-dice-d20"></i> HOLD</button>
+      </section>
+      <section id="right" class="dimmed">
+        <h1>player 2</h1>
+        <span id="playerTwoTotalScore" class="totalScore">34</span>
+        <div class="currentBox">
+          <span class="label">current</span>
+          <span id="playerTowCurrentScore" class="currentScore">11</span>
+        </div>
+      </section>
+    </section>
+  </body>
+</html>

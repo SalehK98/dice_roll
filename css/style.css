@@ -1,0 +1,143 @@
+* {
+  margin: 0;
+  padding: 0;
+  /* box-sizing: border-box;
+  overflow: hidden; */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100vh;
+  background: linear-gradient(
+    to bottom right,
+    #ad1e3c,
+    #711c44,
+    #46194a,
+    #8f245e
+  );
+  font-family: cursive;
+}
+
+#container {
+  width: 70%;
+  height: 100%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+}
+
+#left,
+#right {
+  width: 50%;
+  height: 100%;
+  text-align: center;
+  line-height: 5rem;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 3.125rem;
+}
+
+.totalScore {
+  color: #ba245c;
+  font-size: 3.125rem;
+}
+
+.currentBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  text-align: center;
+  line-height: 0;
+  width: 60%;
+  height: 16%;
+  margin: auto;
+  border: transparent;
+  border-radius: 0.938rem;
+  background-color: #9d1e4f;
+  margin-top: 18rem;
+}
+
+.label {
+  color: #b77891;
+  font-size: 1.5rem;
+}
+
+.currentScore {
+  color: #fff;
+  font-size: 2rem;
+}
+
+#middle {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  height: 80%;
+  width: 14%;
+  margin-top: 20px;
+}
+
+#middle img {
+  /* width: 15%; */
+  height: 20%;
+  border: transparent;
+  border-radius: 15px;
+}
+
+.btn {
+  border: transparent;
+  border-radius: 50px;
+  width: 90%;
+  height: 6%;
+  opacity: 0.8;
+  color: rgb(40, 34, 34);
+  text-align: center;
+}
+
+/* active class */
+
+.active {
+  background-color: #d6a8bb;
+  border: 5px solid #eb4d4d;
+  border-radius: 10px;
+}
+
+.active h1 {
+  color: #49041d;
+}
+
+.active .totalScore {
+  color: #ba245c;
+  font-weight: 600;
+}
+
+.active .currentBox {
+  background-color: #9d1e4f;
+}
+
+/* dimmed class */
+.dimmed {
+  background-color: #ba6f91;
+  border: transparent;
+  border-radius: 15px;
+}
+
+.dimmed .currentBox {
+  background-color: #b24770;
+}
+
+.dimmed .totalScore {
+  color: #9c365b;
+  font-weight: 200;
+}
+.dimmed h1 {
+  color: #9d5b80;
+}
