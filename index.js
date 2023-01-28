@@ -351,7 +351,7 @@ function newTurnAI() {
             if (i > 2) {
                 clearInterval(rollIAI)
                 console.log("you have reached end of interval");
-                setTimeout(hold(), 1000)
+                setTimeout(hold(), 2000)
             }
         }, 1000)
     } else if (50 < target - current2 < 100) {
@@ -364,7 +364,7 @@ function newTurnAI() {
             if (i > 1) {
                 clearInterval(rollIAI)
                 console.log("you have reached end of interval");
-                hold()
+                setTimeout(hold(), 2000)()
 
             }
         }, 500)
