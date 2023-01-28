@@ -32,13 +32,14 @@ const rollDiceButton = document.getElementById("rollDice") // roll dice button i
 const holdButton = document.getElementById("hold") // hold button in main game
 
 // additional 
-let activePlayer = 2
+let activePlayer = 1
 let current1 = parseInt(playerOneCurrent.innerText)
 let current2 = parseInt(playerTwoCurrent.innerText)
 let total1 = parseInt(playerOneTotal.innerText)
 let total2 = parseInt(playerTwoTotal.innerText)
-
-console.log(current1, current2, total1, total2);
+let target;
+let winner;
+let loser;
 
 // ---------------------------------------------------
 
@@ -65,7 +66,8 @@ function myCode(event) {
 }
 
 submit.addEventListener("click", (event) => {
-    init(name1.value, name2.value, targetScore.value) // call the game function to initialize the game
+    target = targetScore.value
+    return init(name1.value, name2.value, targetScore.value) // call the game function to initialize the game
 })
 
 
@@ -75,6 +77,7 @@ function init(name1, name2, targetScore) {
     nameTwo.innerText = name2
     targetSpan.innerText = `target: ${targetScore}`
     holdButton.disabled = true
+    return false
 }
 
 newGameButton.addEventListener("click", newGame)
@@ -123,9 +126,9 @@ function roll() {
             }
             rollDiceButton.disabled = false
             setTimeout(() => holdButton.disabled = false, 100)
-            return accumulateCurrent(sum)
         }
     }, 100)
+    return accumulateCurrent(sum)
 }
 
 function accumulateCurrent(sum) {
@@ -136,6 +139,7 @@ function accumulateCurrent(sum) {
         current2 += sum
         playerTwoCurrent.innerText = current2
     }
+    return false
 }
 
 function endOfTurnSixes() {
@@ -148,6 +152,7 @@ function endOfTurnSixes() {
         playerTwoCurrent.innerText = current2
         activePlayer = 1
     }
+    return newTurn()
 }
 
 
@@ -156,14 +161,53 @@ function hold() {
     if (activePlayer === 1) {
         total1 += current1
         playerOneTotal.innerText = total1
-        current1 = 0
-        playerOneCurrent.innerText = current1
-        activePlayer = 2
+        if (total1 === target) {
+            winner = 1
+            loser = 2
+            console.log("you won 1");
+        } else if (total1 > target) {
+            winner = 2
+            loser = 1
+            console.log("lost passed 1");
+        } else {
+            current1 = 0
+            playerOneCurrent.innerText = current1
+            activePlayer = 2
+            return newTurn()
+        }
     } else {
         total2 += current2
         playerTwoTotal.innerText = total2
-        current2 = 0
-        playerTwoCurrent.innerText = current2
-        activePlayer = 1
+        if (total2 === target) {
+            winner = 2
+            loser = 1
+            console.log("you won 2");
+        } else if (total2 > target) {
+            winner = 1
+            loser = 2
+            console.log("lost passed 2");
+        }
+        else {
+            current2 = 0
+            playerTwoCurrent.innerText = current2
+            activePlayer = 1
+            return newTurn()
+        }
+    }
+}
+
+function newTurn() {
+    rollDiceButton.disabled = false
+    hold.disabled = true
+    if (activePlayer === 1) {
+        left.classList.add("active")
+        left.classList.remove("dimmed")
+        right.classList.add("dimmed")
+        right.classList.remove("active")
+    } else {
+        right.classList.add("active")
+        right.classList.remove("dimmed")
+        left.classList.add("dimmed")
+        left.classList.remove("active")
     }
 }
