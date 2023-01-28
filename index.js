@@ -94,13 +94,20 @@ function newGame() {
     playerTwoTotal.innerText = total2
     playerOneCurrent.innerText = current1
     playerTwoCurrent.innerText = current2
-    left.classList.add("loser")
+    left.classList.remove("winner")
     left.classList.remove("active")
+    left.classList.add("loser")
+    right.classList.remove("winner")
+    right.classList.remove("loser")
+    right.classList.remove("active")
+    right.classList.add("dimmed")
     name1.value = ""
     name2.value = ""
     name2.disabled = true
     radio1.checked = true
     preGame.classList.remove("clicked")
+    rollDiceButton.disabled = false
+    holdButton.disabled = true
 }
 
 rollDiceButton.addEventListener("click", roll)
