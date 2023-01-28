@@ -23,6 +23,16 @@ let playerOneTotal = document.getElementById("playerOneTotalScore") // player on
 let playerTwoTotal = document.getElementById("playerTwoTotalScore") // player two total span in main game
 let playerOneCurrent = document.getElementById("playerOneCurrentScore") // player one current span in main game
 let playerTwoCurrent = document.getElementById("playerOneCurrentScore") // player two current span in main game
+const imag1 = document.getElementById("img1")
+const imag2 = document.getElementById("img2")
+
+// game buttons 
+const newGameButton = document.getElementById("newGame") // new game button in main game
+const rollDice = document.getElementById("rollDice") // roll dice button in amin game
+const hold = document.getElementById("hold") // hold button in main game
+
+// additional 
+let activePlayer = 1
 
 // ---------------------------------------------------
 
@@ -58,22 +68,12 @@ function init(name1, name2, targetScore) {
     nameOne.innerText = name1
     nameTwo.innerText = name2
     targetSpan.innerText = `target: ${targetScore}`
+    hold.disabled = true
 }
 
-
-
-
-
-function roll() {
-    const dice1 = Math.floor(Math.random() * 6 + 1) // dice one value after roll
-    const dice2 = Math.floor(Math.random() * 6 + 1) // dice two value after roll
-    let sum = dice1 + dice2
-}
-
-const newGameButton = document.getElementById("newGame")
 newGameButton.addEventListener("click", newGame)
 
-
+//new game functionality
 function newGame() {
     playerOneTotal = 0
     playerTwoTotal = 0
@@ -87,3 +87,30 @@ function newGame() {
     radio1.checked = true
     preGame.classList.remove("clicked")
 }
+
+rollDice.addEventListener("click", roll)
+
+// roll functionality
+function roll() {
+    hold.disabled = true
+    const dice1 = Math.floor(Math.random() * 6 + 1) // dice one value after roll
+    const dice2 = Math.floor(Math.random() * 6 + 1) // dice two value after roll
+    let sum = dice1 + dice2
+    let i = 0;
+    const rollImage = setInterval(function () {
+        rollDice.disabled = true
+        imag1.src = "./images/dice-" + Math.floor(Math.random() * 6 + 1) + ".png"
+        imag2.src = "./images/dice-" + Math.floor(Math.random() * 6 + 1) + ".png"
+        i++
+        if (i > 5) {
+            clearInterval(rollImage)
+            imag1.src = "./images/dice-" + dice1 + ".png"
+            imag2.src = "./images/dice-" + dice2 + ".png"
+            rollDice.disabled = false
+            setTimeout(() => hold.disabled = false, 100)
+        }
+    }, 100)
+    console.log(dice1, dice2);
+}
+
+
