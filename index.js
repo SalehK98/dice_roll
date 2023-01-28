@@ -25,6 +25,8 @@ let playerOneCurrent = document.getElementById("playerOneCurrentScore") // playe
 let playerTwoCurrent = document.getElementById("playerTwoCurrentScore") // player two current span in main game
 const imag1 = document.getElementById("img1")
 const imag2 = document.getElementById("img2")
+const msg1 = document.getElementById("msg1")
+const msg2 = document.getElementById("msg2")
 
 // game buttons 
 const newGameButton = document.getElementById("newGame") // new game button in main game
@@ -164,11 +166,15 @@ function hold() {
         if (total1 === target) {
             winner = 1
             loser = 2
-            console.log("you won 1");
+            msg1.innerText = "You Win!"
+            msg2.innerText = name1.value + "reached the target, you lost"
+            return endGame()
         } else if (total1 > target) {
             winner = 2
             loser = 1
-            console.log("lost passed 1");
+            msg1.innerText = "Passed the target, you lost"
+            msg2.innerText = "You win!"
+            return endGame()
         } else {
             current1 = 0
             playerOneCurrent.innerText = current1
@@ -181,11 +187,15 @@ function hold() {
         if (total2 === target) {
             winner = 2
             loser = 1
-            console.log("you won 2");
+            msg2.innerText = "You Win!"
+            msg1.innerText = name2.value + "reached the target, you lost"
+            return endGame()
         } else if (total2 > target) {
             winner = 1
             loser = 2
-            console.log("lost passed 2");
+            msg2.innerText = "Passed the target, you lost"
+            msg1.innerText = "You win!"
+            return endGame()
         }
         else {
             current2 = 0
@@ -209,5 +219,29 @@ function newTurn() {
         right.classList.remove("dimmed")
         left.classList.add("dimmed")
         left.classList.remove("active")
+    }
+}
+
+function endGame() {
+    current1 = 0
+    current2 = 0
+    playerOneCurrent.innerText = current1
+    playerTwoCurrent.innerText = current2
+    rollDiceButton.disabled = true
+    holdButton.disabled = true
+    if (winner === 1) {
+        left.classList.add("winner")
+        left.classList.remove("active")
+        left.classList.remove("dimmed")
+        right.classList.add("loser")
+        right.classList.remove("dimmed")
+        right.classList.remove("active")
+    } else {
+        right.classList.add("winner")
+        right.classList.remove("active")
+        right.classList.remove("dimmed")
+        left.classList.add("loser")
+        left.classList.remove("active")
+        left.classList.remove("dimmed")
     }
 }
