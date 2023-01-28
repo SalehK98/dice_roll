@@ -10,38 +10,134 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
       integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
       crossorigin="anonymous"
-      referrerpolicy="no-referrer"
+      referresrpolicy="no-referrer"
     />
     <title>Dice game</title>
   </head>
   <body>
     <section id="container">
-      <section id="left" class="active">
-        <h1>player 1</h1>
-        <span id="playerOneTotalScore" class="totalScore">50</span>
+      <section id="preGame">
+        <div id="instructions">
+          <h1>Game Instructions</h1>
+          <ul>
+            <li>
+              In your turn - roll the dice(at least once) and accumulate the
+              result in "current".
+            </li>
+            <li>
+              You can roll agin or click "Hold" to save the points from
+              "Current" and end the turn.
+            </li>
+            <li>
+              Note if you get 6-6 you will lose all points from "current" and
+              the turn will go to your opponent.
+            </li>
+            <li>
+              if you manged to reach exactly the target score - you win, if you
+              passed it you lose...
+            </li>
+            <li>player one starts first - on the left side.</li>
+          </ul>
+        </div>
+        <div id="form">
+          <form onsubmit="return myCode(event)">
+            <span>How many players are playing:</span>
+            <br />
+            <label for="numOfPLayers">
+              <input
+                type="radio"
+                name="numOfPLayers"
+                id="one"
+                value="1"
+                checked
+                required
+              />
+              1
+            </label>
+
+            <label for="numOfPLayers">
+              <input
+                type="radio"
+                name="numOfPLayers"
+                id="two"
+                value="2"
+                required
+              />
+              2
+            </label>
+            <br />
+            <label for="playerOneName"
+              >Please enter the <b> First </b> player's name</label
+            >
+            <span class="names">
+              <input
+                type="text"
+                name="playerOneName"
+                id="playerOneName"
+                maxlength="18"
+                required
+              />
+            </span>
+            <br />
+            <label for="playerTwoName"
+              >Please enter the <b> Second </b> player's name</label
+            >
+            <span class="names">
+              <input
+                type="text"
+                name="playerTwoName"
+                id="playerTwoName"
+                maxlength="13"
+                required
+            /></span>
+            <br />
+            <label for="targetScore"
+              >Please select a target score between(20-80)</label
+            >
+            <input
+              type="number"
+              name="targetScore"
+              id="targetScore"
+              value="50"
+              min="20"
+              max="80"
+              required
+            />
+            <br />
+            <input type="submit" value="START GAME" id="game" />
+          </form>
+        </div>
+      </section>
+      <section id="left" class="loser">
+        <h1 id="nameOne">player 1</h1>
+        <span id="playerOneTotalScore" class="totalScore">0</span>
+        <div class="msg">You Win!!</div>
         <div class="currentBox">
           <span class="label">current</span>
-          <span id="playerOneCurrentScore" class="currentScore">11</span>
+          <span id="playerOneCurrentScore" class="currentScore">0</span>
         </div>
       </section>
       <section id="middle">
-        <button class="btn">
+        <button class="btn" id="newGame">
           <i class="fa-solid fa-gamepad"></i>
           NEW GAME
         </button>
+        <h1 id="targetSpan">target: 20</h1>
         <img src="./images/dice-1.png" alt="" />
         <img src="./images/dice-2.png" alt="" />
         <button class="btn"><i class="fa-solid fa-dice"></i> ROLL DICE</button>
         <button class="btn"><i class="fa-solid fa-dice-d20"></i> HOLD</button>
       </section>
       <section id="right" class="dimmed">
-        <h1>player 2</h1>
-        <span id="playerTwoTotalScore" class="totalScore">34</span>
+        <h1 id="nameTwo">player 2</h1>
+        <span id="playerTwoTotalScore" class="totalScore">0</span>
+        <div class="msg">You Win!!</div>
         <div class="currentBox">
           <span class="label">current</span>
-          <span id="playerTowCurrentScore" class="currentScore">11</span>
+          <span id="playerTowCurrentScore" class="currentScore">0</span>
         </div>
       </section>
     </section>
   </body>
+  <script src="./index.js"></script>
 </html>

@@ -31,6 +31,86 @@ body {
   box-sizing: border-box;
 }
 
+/* from */
+#container #preGame {
+  width: 90%;
+  height: 90%;
+  margin: auto;
+  position: absolute;
+  z-index: 2;
+  margin-top: 20px;
+  box-sizing: border-box;
+  background-color: #c17f97;
+  border: 10px solid #804878;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#container #preGame #instructions h1 {
+  margin-left: 30px;
+}
+
+#container #preGame #instructions ul {
+  margin-top: 20px;
+  line-height: 1.5rem;
+  margin-left: 50px;
+}
+#container #preGame #form input {
+  font-family: cursive;
+  box-sizing: border-box;
+  font-size: 18px;
+  font-weight: 200;
+  color: #9d1e4f;
+  text-align: center;
+}
+
+#container #preGame #form form {
+  /* background-color: red; */
+  line-height: 3rem;
+  text-align: center;
+}
+
+#container #preGame #form form input[type="text"],
+input[type="number"] {
+  border: transparent;
+  border-radius: 20px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  outline: solid #9d1e4f;
+}
+
+input[type="radio"] {
+  accent-color: #9d1e4f;
+  transform: scale(1.5);
+  margin-right: 5px;
+  margin-left: 20px;
+}
+
+input[type="submit"] {
+  background-color: #343b3a;
+  border: transparent;
+  border-radius: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+input[type="submit"]:active {
+  transform: translateY(3px) translateX(1px);
+}
+
+.clicked {
+  visibility: hidden;
+  /* display: none; */
+}
+
+/* main page */
 #left,
 #right {
   width: 50%;
@@ -38,15 +118,27 @@ body {
   text-align: center;
   line-height: 5rem;
   box-sizing: border-box;
+  /* position: relative; */
+  /* display: flex;
+  flex-direction: column; */
+  /* box-sizing: border-box; */
 }
 
-h1 {
+#left h1,
+#right h1 {
   font-size: 3.125rem;
 }
 
 .totalScore {
   color: #ba245c;
   font-size: 3.125rem;
+}
+
+.msg {
+  margin-top: 15rem;
+  box-sizing: border-box;
+  font-size: 1.5rem;
+  visibility: hidden;
 }
 
 .currentBox {
@@ -61,7 +153,7 @@ h1 {
   border: transparent;
   border-radius: 0.938rem;
   background-color: #9d1e4f;
-  margin-top: 18rem;
+  margin-top: 1rem;
 }
 
 .label {
@@ -74,6 +166,8 @@ h1 {
   font-size: 2rem;
 }
 
+/* middle */
+
 #middle {
   position: absolute;
   display: flex;
@@ -83,6 +177,17 @@ h1 {
   height: 80%;
   width: 14%;
   margin-top: 20px;
+}
+
+#middle #targetSpan {
+  font-size: 18px;
+  background-color: #eae1e5;
+  /* opacity: 0.9; */
+  border: transparent;
+  border-radius: 15px;
+  padding: 5px;
+  color: #49041d;
+  text-align: center;
 }
 
 #middle img {
@@ -100,14 +205,19 @@ h1 {
   opacity: 0.8;
   color: rgb(40, 34, 34);
   text-align: center;
+  cursor: pointer;
+}
+
+.btn:active {
+  transform: translateY(3px) translateX(1px);
 }
 
 /* active class */
 
 .active {
   background-color: #d6a8bb;
-  border: 5px solid #eb4d4d;
-  border-radius: 10px;
+  border: 2px solid #eb4d4d;
+  /* border-radius: 10px; */
 }
 
 .active h1 {
@@ -127,11 +237,12 @@ h1 {
 .dimmed {
   background-color: #ba6f91;
   border: transparent;
-  border-radius: 15px;
+  /* border-radius: 15px; */
 }
 
 .dimmed .currentBox {
   background-color: #b24770;
+  margin-top: 1rem;
 }
 
 .dimmed .totalScore {
@@ -140,4 +251,52 @@ h1 {
 }
 .dimmed h1 {
   color: #9d5b80;
+}
+
+.dimmed .msg {
+  margin-top: 15.3rem;
+}
+
+/* winner */
+
+.winner {
+  background-color: #2f2f2f;
+  color: #b3285a;
+  border: transparent;
+}
+
+.winner .currentBox {
+  color: #fff;
+}
+
+.winner .label {
+  color: #b77891;
+}
+
+.winner .msg {
+  content: "You Win!";
+  visibility: visible;
+}
+
+/* loser */
+.loser {
+  background-color: #d6a8bb;
+}
+
+.loser h1 {
+  color: #49041d;
+}
+
+.loser .totalScore {
+  color: #ba245c;
+  /* font-weight: 600; */
+}
+
+.loser .currentBox {
+  background-color: #9d1e4f;
+}
+
+.loser .msg {
+  content: "Passed the target score";
+  visibility: visible;
 }
