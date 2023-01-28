@@ -42,6 +42,9 @@ let total2 = parseInt(playerTwoTotal.innerText)
 let target;
 let winner;
 let loser;
+let numOfPLayer;
+let isAI = false;
+let isAITurn = false;
 
 // ---------------------------------------------------
 
@@ -61,20 +64,68 @@ for (let index = 0; index < radios.length; index++) {
 // submit the pre Game Register form
 function myCode(event) {
     event.preventDefault()
-    preGame.classList.add("clicked")
-    left.classList.add("active")
-    left.classList.remove("loser")
     return false
 }
 
 submit.addEventListener("click", (event) => {
-    target = targetScore.value
-    return init(name1.value, name2.value, targetScore.value) // call the game function to initialize the game
+    submit.disabled = true
+    submit.style.opacity = 0.5
+    target = parseInt(targetScore.value)
+    const RadioValue = () => {
+        const ele = document.getElementsByName('numOfPLayers');
+        for (i = 0; i < ele.length; i++) {
+            if (ele[i].checked)
+                numOfPLayer = ele[i].value;
+        }
+    }
+    RadioValue()
+    if (numOfPLayer == 2) {
+        preGame.classList.add("clicked")
+        left.classList.add("active")
+        left.classList.remove("loser")
+        isAI = false
+        return init(name1.value, name2.value, targetScore.value) // call the game function to initialize the game
+    } else {
+        isAI = true;
+        return setUpAI()
+    }
 })
+
+function setUpAI() {
+    fetch("https://api.fungenerators.com/name/categories.json?start=0&limit=5")
+        .then((response) => {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error('Something went wrong')
+        })
+
+        .then((data) => {
+            let gen = data.contents[1].name
+            init(name1.value, gen, targetScore.value)
+        })
+        .catch((error) => {
+            preGame.classList.add("clicked")
+            left.classList.add("active")
+            left.classList.remove("loser")
+            if (name1.value.split(" ") === undefined) {
+                let gen1 = [...name1.value.split(" ")[0]].reverse().sort((a, b) => a - b).join("")
+                let gen2 = [...name1.value.split(" ")[1]].reverse().sort((a, b) => b - a).join("")
+                let gen = gen1 + " " + gen2
+                init(name1.value, gen, targetScore.value)
+            } else {
+                let gen = name1.value.split("").reverse().sort((a, b) => b - a).join("")
+                init(name1.value, gen, targetScore.value)
+
+            }
+        });
+}
 
 
 // initializing the game set-up players names and target score
 function init(name1, name2, targetScore) {
+    submit.disabled = false
+    submit.style.opacity = 1
     nameOne.innerText = name1
     nameTwo.innerText = name2
     targetSpan.innerText = `target: ${targetScore}`
@@ -108,6 +159,16 @@ function newGame() {
     preGame.classList.remove("clicked")
     rollDiceButton.disabled = false
     holdButton.disabled = true
+    isAI = false
+    isAITurn = false
+    activePlayer = 1
+    nameOne.innerText = "play"
+    nameTwo.innerText = "play"
+    targetSpan.innerText = "target: "
+    msg1.innerText = "you"
+    msg2.innerText = "you"
+    msg1.style.visibility = "hidden"
+    msg2.style.visibility = "hidden"
 }
 
 rollDiceButton.addEventListener("click", roll)
@@ -156,66 +217,168 @@ function endOfTurnSixes() {
         current1 = 0
         playerOneCurrent.innerText = current1
         activePlayer = 2
+        isAITurn = true
     } else {
         current2 = 0
         playerTwoCurrent.innerText = current2
         activePlayer = 1
     }
-    return newTurn()
+    if (isAI && isAITurn) {
+        return newTurnAI()
+    } else {
+        return newTurn()
+    }
 }
 
 
 holdButton.addEventListener("click", hold)
 function hold() {
-    if (activePlayer === 1) {
-        total1 += current1
-        playerOneTotal.innerText = total1
-        if (total1 === target) {
-            winner = 1
-            loser = 2
-            msg1.innerText = "You Win!"
-            msg2.innerText = name1.value + "reached the target, you lost"
-            return endGame()
-        } else if (total1 > target) {
-            winner = 2
-            loser = 1
-            msg1.innerText = "Passed the target, you lost"
-            msg2.innerText = "You win!"
-            return endGame()
+    console.log(isAI);
+    if (isAI) {
+        console.log("there is ai");
+        if (isAITurn) {
+            console.log("its ai turn");
+            total2 += current2
+            playerTwoTotal.innerText = total2
+            console.log("next step", total2, target);
+            if (total2 === target) {
+                winner = 2
+                loser = 1
+                msg2.innerText = "You Win!"
+                msg1.innerText = name1.value + "reached the target, you lost"
+                return endGame()
+            } else if (total2 > target) {
+                console.log("did i reach this line");
+                winner = 1
+                loser = 2
+                msg2.innerText = "Passed the target, you lost"
+                msg1.innerText = "You win!"
+                return endGame()
+            } else {
+                current2 = 0
+                playerTwoCurrent.innerText = current2
+                activePlayer = 1
+                isAITurn = false
+                console.log("yes i have reached this point 2");
+                return newTurn()
+            }
+
         } else {
-            current1 = 0
-            playerOneCurrent.innerText = current1
-            activePlayer = 2
-            return newTurn()
+            console.log("not ai turn");
+            total1 += current1
+            playerOneTotal.innerText = total1
+            if (total1 === target) {
+                winner = 1
+                loser = 2
+                msg1.innerText = "You Win!"
+                msg2.innerText = name1.value + "reached the target, you lost"
+                return endGame()
+            } else if (total1 > target) {
+                winner = 2
+                loser = 1
+                msg1.innerText = "Passed the target, you lost"
+                msg2.innerText = "You win!"
+                return endGame()
+            } else {
+                current1 = 0
+                playerOneCurrent.innerText = current1
+                activePlayer = 2
+                isAITurn = true
+                console.log("yes i have reached this point 1");
+                return newTurnAI()
+            }
+
         }
     } else {
-        total2 += current2
-        playerTwoTotal.innerText = total2
-        if (total2 === target) {
-            winner = 2
-            loser = 1
-            msg2.innerText = "You Win!"
-            msg1.innerText = name2.value + "reached the target, you lost"
-            return endGame()
-        } else if (total2 > target) {
-            winner = 1
-            loser = 2
-            msg2.innerText = "Passed the target, you lost"
-            msg1.innerText = "You win!"
-            return endGame()
+        if (activePlayer === 1) {
+            total1 += current1
+            playerOneTotal.innerText = total1
+            console.log(total1, typeof target);
+            if (total1 === target) {
+                winner = 1
+                loser = 2
+                msg1.innerText = "You Win!"
+                msg2.innerText = name1.value + "reached the target, you lost"
+                return endGame()
+            } else if (total1 > target) {
+                winner = 2
+                loser = 1
+                msg1.innerText = "Passed the target, you lost"
+                msg2.innerText = "You win!"
+                return endGame()
+            } else {
+                current1 = 0
+                playerOneCurrent.innerText = current1
+                activePlayer = 2
+                return newTurn()
+            }
+        } else {
+            total2 += current2
+            playerTwoTotal.innerText = total2
+            if (total2 === target) {
+                winner = 2
+                loser = 1
+                msg2.innerText = "You Win!"
+                msg1.innerText = name2.value + "reached the target, you lost"
+                return endGame()
+            } else if (total2 > target) {
+                winner = 1
+                loser = 2
+                msg2.innerText = "Passed the target, you lost"
+                msg1.innerText = "You win!"
+                return endGame()
+            }
+            else {
+                current2 = 0
+                playerTwoCurrent.innerText = current2
+                activePlayer = 1
+                return newTurn()
+            }
         }
-        else {
-            current2 = 0
-            playerTwoCurrent.innerText = current2
-            activePlayer = 1
-            return newTurn()
-        }
+    }
+}
+
+function newTurnAI() {
+    console.log("entered ai turn");
+    newTurn()
+    rollDiceButton.disabled = true
+    if (target - current2 >= 100) {
+        let i = 0;
+        const rollIAI = setInterval(function () {
+            console.log("1");
+            roll()
+            i++
+            if (i > 2) {
+                clearInterval(rollIAI)
+                console.log("you have reached end of interval");
+                setTimeout(hold(), 1000)
+            }
+        }, 1000)
+    } else if (50 < target - current2 < 100) {
+
+        let i = 0;
+        const rollIAI = setInterval(function () {
+            console.log("2");
+            roll()
+            i++
+            if (i > 1) {
+                clearInterval(rollIAI)
+                console.log("you have reached end of interval");
+                hold()
+
+            }
+        }, 500)
+    } else {
+        console.log("3");
+        roll()
+        setTimeout(hold(), 1000)
+
     }
 }
 
 function newTurn() {
     rollDiceButton.disabled = false
-    hold.disabled = true
+    holdButton.disabled = true
     if (activePlayer === 1) {
         left.classList.add("active")
         left.classList.remove("dimmed")
@@ -227,6 +390,7 @@ function newTurn() {
         left.classList.add("dimmed")
         left.classList.remove("active")
     }
+    return false
 }
 
 function endGame() {
@@ -251,4 +415,5 @@ function endGame() {
         left.classList.remove("active")
         left.classList.remove("dimmed")
     }
+    return false
 }
