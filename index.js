@@ -33,6 +33,15 @@ const newGameButton = document.getElementById("newGame") // new game button in m
 const rollDiceButton = document.getElementById("rollDice") // roll dice button in amin game
 const holdButton = document.getElementById("hold") // hold button in main game
 
+// sounds and music
+const winSound = document.getElementById("winSound")
+const loseSound = document.getElementById("loseSound")
+const holdSound = document.getElementById("holdSound")
+const rollSound = document.getElementById("rollSound")
+const doubleSixSound = document.getElementById("double_six_sound")
+const bg_music = document.getElementById("bg_music")
+const preSound = document.getElementById("preSound")
+
 // additional 
 let activePlayer = 1
 let current1 = parseInt(playerOneCurrent.innerText)
@@ -47,7 +56,8 @@ let isAI = false;
 let isAITurn = false;
 
 // ---------------------------------------------------
-
+// window.onload()
+// preSound.play()
 
 // pre Game set-up
 secondName.disabled = true
@@ -57,6 +67,7 @@ for (let index = 0; index < radios.length; index++) {
             secondName.disabled = false
         } else {
             secondName.disabled = true
+
         }
     })
 }
@@ -124,6 +135,10 @@ function setUpAI() {
 
 // initializing the game set-up players names and target score
 function init(name1, name2, targetScore) {
+    preSound.loop = "false"
+    preSound.pause()
+    bg_music.play()
+    bg_music.volume = 0.05
     submit.disabled = false
     submit.style.opacity = 1
     nameOne.innerText = name1
@@ -137,6 +152,14 @@ newGameButton.addEventListener("click", newGame)
 
 //new game functionality
 function newGame() {
+    winSound.pause()
+    loseSound.pause()
+    rollSound.pause()
+    holdSound.pause()
+    bg_music.pause()
+    doubleSixSound.pause()
+    preSound.loop = "true"
+    preSound.play()
     current1 = 0
     current2 = 0
     total1 = 0
@@ -175,6 +198,8 @@ rollDiceButton.addEventListener("click", roll)
 
 // roll functionality
 function roll() {
+    rollSound.volume = 1
+    rollSound.play()
     holdButton.disabled = true
     const dice1 = Math.floor(Math.random() * 6 + 1) // dice one value after roll
     const dice2 = Math.floor(Math.random() * 6 + 1) // dice two value after roll
@@ -213,6 +238,7 @@ function accumulateCurrent(sum) {
 }
 
 function endOfTurnSixes() {
+    doubleSixSound.play()
     if (activePlayer === 1) {
         current1 = 0
         playerOneCurrent.innerText = current1
@@ -233,6 +259,8 @@ function endOfTurnSixes() {
 
 holdButton.addEventListener("click", hold)
 function hold() {
+    // holdSound.play()
+    // bg_music.pause()
     console.log(isAI);
     if (isAI) {
         console.log("there is ai");
@@ -245,21 +273,24 @@ function hold() {
                 winner = 2
                 loser = 1
                 msg2.innerText = "You Win!"
-                msg1.innerText = name1.value + "reached the target, you lost"
-                return endGame()
+                msg1.innerText = name1.value + " reached the target, you lost"
+
+                return handleSounds()
             } else if (total2 > target) {
                 console.log("did i reach this line");
                 winner = 1
                 loser = 2
                 msg2.innerText = "Passed the target, you lost"
                 msg1.innerText = "You win!"
-                return endGame()
+                return handleSounds()
             } else {
                 current2 = 0
                 playerTwoCurrent.innerText = current2
                 activePlayer = 1
                 isAITurn = false
                 console.log("yes i have reached this point 2");
+                // holdSound.pause()
+                holdButton.disabled = true
                 return newTurn()
             }
 
@@ -271,20 +302,22 @@ function hold() {
                 winner = 1
                 loser = 2
                 msg1.innerText = "You Win!"
-                msg2.innerText = name1.value + "reached the target, you lost"
-                return endGame()
+                msg2.innerText = name1.value + " reached the target, you lost"
+                return handleSounds()
             } else if (total1 > target) {
                 winner = 2
                 loser = 1
                 msg1.innerText = "Passed the target, you lost"
                 msg2.innerText = "You win!"
-                return endGame()
+                return handleSounds()
             } else {
                 current1 = 0
                 playerOneCurrent.innerText = current1
                 activePlayer = 2
                 isAITurn = true
                 console.log("yes i have reached this point 1");
+                // holdSound.pause()
+                holdButton.disabled = true
                 return newTurnAI()
             }
 
@@ -298,18 +331,20 @@ function hold() {
                 winner = 1
                 loser = 2
                 msg1.innerText = "You Win!"
-                msg2.innerText = name1.value + "reached the target, you lost"
-                return endGame()
+                msg2.innerText = name1.value + " reached the target, you lost"
+                return handleSounds()
             } else if (total1 > target) {
                 winner = 2
                 loser = 1
                 msg1.innerText = "Passed the target, you lost"
                 msg2.innerText = "You win!"
-                return endGame()
+                return handleSounds()
             } else {
                 current1 = 0
                 playerOneCurrent.innerText = current1
                 activePlayer = 2
+                // holdSound.pause()
+                holdButton.disabled = true
                 return newTurn()
             }
         } else {
@@ -319,19 +354,21 @@ function hold() {
                 winner = 2
                 loser = 1
                 msg2.innerText = "You Win!"
-                msg1.innerText = name2.value + "reached the target, you lost"
-                return endGame()
+                msg1.innerText = name2.value + " reached the target, you lost"
+                return handleSounds()
             } else if (total2 > target) {
                 winner = 1
                 loser = 2
                 msg2.innerText = "Passed the target, you lost"
                 msg1.innerText = "You win!"
-                return endGame()
+                return handleSounds()
             }
             else {
                 current2 = 0
                 playerTwoCurrent.innerText = current2
                 activePlayer = 1
+                // holdSound.pause()
+                holdButton.disabled = true
                 return newTurn()
             }
         }
@@ -339,10 +376,11 @@ function hold() {
 }
 
 function newTurnAI() {
+    // doubleSixSound.pause()
     console.log("entered ai turn");
     newTurn()
     rollDiceButton.disabled = true
-    if (target - current2 >= 100) {
+    if (target - total2 >= 100) {
         let i = 0;
         const rollIAI = setInterval(function () {
             console.log("1");
@@ -351,10 +389,10 @@ function newTurnAI() {
             if (i > 2) {
                 clearInterval(rollIAI)
                 console.log("you have reached end of interval");
-                setTimeout(hold(), 2000)
+                hold()
             }
         }, 1000)
-    } else if (50 < target - current2 < 100) {
+    } else if (50 < target - total2 < 100) {
 
         let i = 0;
         const rollIAI = setInterval(function () {
@@ -364,21 +402,22 @@ function newTurnAI() {
             if (i > 1) {
                 clearInterval(rollIAI)
                 console.log("you have reached end of interval");
-                setTimeout(hold(), 2000)()
-
+                hold()
             }
         }, 500)
     } else {
         console.log("3");
         roll()
-        setTimeout(hold(), 1000)
+        hold()
 
     }
 }
 
 function newTurn() {
-    rollDiceButton.disabled = false
-    holdButton.disabled = true
+    // doubleSixSound.pause()
+    console.log("wow its not good");
+    rollDiceButton.disabled = false; console.log("on this line 1");
+    holdButton.disabled = true; console.log("on this line 2");
     if (activePlayer === 1) {
         left.classList.add("active")
         left.classList.remove("dimmed")
@@ -391,6 +430,24 @@ function newTurn() {
         left.classList.remove("active")
     }
     return false
+}
+
+function handleSounds() {
+    bg_music.pause()
+    holdSound.pause()
+    rollSound.pause()
+    if (isAI) {
+        if (winner === 1) {
+            winSound.play()
+            return endGame()
+        } else {
+            loseSound.play()
+            return endGame()
+        }
+    } else {
+        winSound.play()
+        return endGame()
+    }
 }
 
 function endGame() {
