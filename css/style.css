@@ -58,7 +58,8 @@ body {
   line-height: 1.5rem;
   margin-left: 50px;
 }
-#container #preGame #form input {
+#container #preGame #form input,
+#game {
   font-family: cursive;
   box-sizing: border-box;
   font-size: 18px;
@@ -93,7 +94,7 @@ input[type="radio"] {
   margin-left: 20px;
 }
 
-input[type="submit"] {
+/* input[type="submit"] {
   background-color: #343b3a;
   border: transparent;
   border-radius: 15px;
@@ -102,6 +103,18 @@ input[type="submit"] {
 }
 
 input[type="submit"]:active {
+  transform: translateY(3px) translateX(1px);
+} */
+
+#game {
+  background-color: #343b3a;
+  border: transparent;
+  border-radius: 15px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+#game:active {
   transform: translateY(3px) translateX(1px);
 }
 

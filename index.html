@@ -42,7 +42,7 @@
           </ul>
         </div>
         <div id="form">
-          <form onsubmit="return myCode(event)">
+          <form onsubmit="return myCode(event)" id="form1">
             <span>How many players are playing:</span>
             <br />
             <label for="numOfPLayers">
@@ -107,7 +107,8 @@
               required
             />
             <br />
-            <input type="submit" value="START GAME" id="game" />
+            <button id="game">START GAME</button>
+            <!-- <input type="submit" value="START GAME" id="game" /> -->
           </form>
         </div>
       </section>

@@ -56,8 +56,6 @@ let isAI = false;
 let isAITurn = false;
 
 // ---------------------------------------------------
-// window.onload()
-// preSound.play()
 
 // pre Game set-up
 secondName.disabled = true
@@ -73,15 +71,15 @@ for (let index = 0; index < radios.length; index++) {
 }
 
 // submit the pre Game Register form
-function myCode(event) {
-    event.preventDefault()
-    return false
-}
 
-submit.addEventListener("click", (event) => {
+document.getElementById("form1").addEventListener("submit", (event) => {
+    event.preventDefault()
     submit.disabled = true
     submit.style.opacity = 0.5
+    preSound.loop = "false"
+    preSound.pause()
     target = parseInt(targetScore.value)
+
     const RadioValue = () => {
         const ele = document.getElementsByName('numOfPLayers');
         for (i = 0; i < ele.length; i++) {
@@ -91,17 +89,60 @@ submit.addEventListener("click", (event) => {
     }
     RadioValue()
     if (numOfPLayer == 2) {
+        console.log("enterd my player 2 zone");
         preGame.classList.add("clicked")
         left.classList.add("active")
         left.classList.remove("loser")
         isAI = false
-        return init(name1.value, name2.value, targetScore.value) // call the game function to initialize the game
+        init(name1.value, name2.value, targetScore.value) // call the game function to initialize the game
     } else {
+        console.log("enterd my player 1 zpne");
         isAI = true;
-        return setUpAI()
+        setUpAI()
     }
-})
 
+})
+// function myCode(event) {
+//     // event.preventDefault()
+//     return false
+// }
+
+// submit.addEventListener("click", (event) => {
+//     submit.disabled = true
+//     submit.style.opacity = 0.5
+//     preSound.loop = "false"
+//     preSound.pause()
+//     target = parseInt(targetScore.value)
+//     // if (50 <= target && target <= 200) {
+//     //     console.log(target)
+//     //     console.log("correct");
+//     // } else (
+//     //     console.log("wrong")
+//     // )
+//     const RadioValue = () => {
+//         const ele = document.getElementsByName('numOfPLayers');
+//         for (i = 0; i < ele.length; i++) {
+//             if (ele[i].checked)
+//                 numOfPLayer = ele[i].value;
+//         }
+//     }
+//     RadioValue()
+//     console.log(numOfPLayer);
+//     // if (numOfPLayer == 2) {
+//     //     console.log("enterd my player 2 zone");
+//     //     preGame.classList.add("clicked")
+//     //     left.classList.add("active")
+//     //     left.classList.remove("loser")
+//     //     isAI = false
+//     //     init(name1.value, name2.value, targetScore.value) // call the game function to initialize the game
+//     // } else {
+//     //     console.log("enterd my player 1 zpne");
+//     //     isAI = true;
+//     // }
+
+//     init(name1.value, name2.value, target)
+
+// })
 function setUpAI() {
     fetch("https://api.fungenerators.com/name/categories.json?start=0&limit=5")
         .then((response) => {
@@ -116,6 +157,7 @@ function setUpAI() {
             init(name1.value, gen, targetScore.value)
         })
         .catch((error) => {
+            console.log("my error is here as well");
             preGame.classList.add("clicked")
             left.classList.add("active")
             left.classList.remove("loser")
@@ -130,13 +172,16 @@ function setUpAI() {
 
             }
         });
+
 }
+
 
 
 // initializing the game set-up players names and target score
 function init(name1, name2, targetScore) {
-    preSound.loop = "false"
-    preSound.pause()
+    preGame.classList.add("clicked")
+    left.classList.add("active")
+    left.classList.remove("loser")
     bg_music.play()
     bg_music.volume = 0.05
     submit.disabled = false
@@ -145,7 +190,7 @@ function init(name1, name2, targetScore) {
     nameTwo.innerText = name2
     targetSpan.innerText = `target: ${targetScore}`
     holdButton.disabled = true
-    return false
+    // return false
 }
 
 newGameButton.addEventListener("click", newGame)
@@ -217,13 +262,13 @@ function roll() {
             imag1.src = "./images/dice-" + dice1 + ".png"
             imag2.src = "./images/dice-" + dice2 + ".png"
             if (dice1 === 6 && dice2 === 6) {
-                return endOfTurnSixes()
+                endOfTurnSixes()
             }
             rollDiceButton.disabled = false
             setTimeout(() => holdButton.disabled = false, 100)
         }
     }, 100)
-    return accumulateCurrent(sum)
+    accumulateCurrent(sum)
 }
 
 function accumulateCurrent(sum) {
@@ -234,7 +279,7 @@ function accumulateCurrent(sum) {
         current2 += sum
         playerTwoCurrent.innerText = current2
     }
-    return false
+    // return false
 }
 
 function endOfTurnSixes() {
@@ -250,16 +295,16 @@ function endOfTurnSixes() {
         activePlayer = 1
     }
     if (isAI && isAITurn) {
-        return newTurnAI()
+        newTurnAI()
     } else {
-        return newTurn()
+        newTurn()
     }
 }
 
 
 holdButton.addEventListener("click", hold)
 function hold() {
-    // holdSound.play()
+    holdSound.play()
     // bg_music.pause()
     console.log(isAI);
     if (isAI) {
@@ -275,14 +320,14 @@ function hold() {
                 msg2.innerText = "You Win!"
                 msg1.innerText = name1.value + " reached the target, you lost"
 
-                return handleSounds()
+                handleSounds()
             } else if (total2 > target) {
                 console.log("did i reach this line");
                 winner = 1
                 loser = 2
                 msg2.innerText = "Passed the target, you lost"
                 msg1.innerText = "You win!"
-                return handleSounds()
+                handleSounds()
             } else {
                 current2 = 0
                 playerTwoCurrent.innerText = current2
@@ -291,7 +336,7 @@ function hold() {
                 console.log("yes i have reached this point 2");
                 // holdSound.pause()
                 holdButton.disabled = true
-                return newTurn()
+                newTurn()
             }
 
         } else {
@@ -303,13 +348,13 @@ function hold() {
                 loser = 2
                 msg1.innerText = "You Win!"
                 msg2.innerText = name1.value + " reached the target, you lost"
-                return handleSounds()
+                handleSounds()
             } else if (total1 > target) {
                 winner = 2
                 loser = 1
                 msg1.innerText = "Passed the target, you lost"
                 msg2.innerText = "You win!"
-                return handleSounds()
+                handleSounds()
             } else {
                 current1 = 0
                 playerOneCurrent.innerText = current1
@@ -318,7 +363,7 @@ function hold() {
                 console.log("yes i have reached this point 1");
                 // holdSound.pause()
                 holdButton.disabled = true
-                return newTurnAI()
+                newTurnAI()
             }
 
         }
@@ -332,20 +377,20 @@ function hold() {
                 loser = 2
                 msg1.innerText = "You Win!"
                 msg2.innerText = name1.value + " reached the target, you lost"
-                return handleSounds()
+                handleSounds()
             } else if (total1 > target) {
                 winner = 2
                 loser = 1
                 msg1.innerText = "Passed the target, you lost"
                 msg2.innerText = "You win!"
-                return handleSounds()
+                handleSounds()
             } else {
                 current1 = 0
                 playerOneCurrent.innerText = current1
                 activePlayer = 2
                 // holdSound.pause()
                 holdButton.disabled = true
-                return newTurn()
+                newTurn()
             }
         } else {
             total2 += current2
@@ -355,13 +400,13 @@ function hold() {
                 loser = 1
                 msg2.innerText = "You Win!"
                 msg1.innerText = name2.value + " reached the target, you lost"
-                return handleSounds()
+                handleSounds()
             } else if (total2 > target) {
                 winner = 1
                 loser = 2
                 msg2.innerText = "Passed the target, you lost"
                 msg1.innerText = "You win!"
-                return handleSounds()
+                handleSounds()
             }
             else {
                 current2 = 0
@@ -369,7 +414,7 @@ function hold() {
                 activePlayer = 1
                 // holdSound.pause()
                 holdButton.disabled = true
-                return newTurn()
+                newTurn()
             }
         }
     }
@@ -389,7 +434,7 @@ function newTurnAI() {
             if (i > 2) {
                 clearInterval(rollIAI)
                 console.log("you have reached end of interval");
-                hold()
+                setTimeout(hold, 1000)
             }
         }, 1000)
     } else if (50 < target - total2 < 100) {
@@ -402,13 +447,15 @@ function newTurnAI() {
             if (i > 1) {
                 clearInterval(rollIAI)
                 console.log("you have reached end of interval");
-                hold()
+                setTimeout(hold, 1000)
+
             }
         }, 500)
     } else {
         console.log("3");
         roll()
-        hold()
+        setTimeout(hold, 1000)
+
 
     }
 }
@@ -429,7 +476,7 @@ function newTurn() {
         left.classList.add("dimmed")
         left.classList.remove("active")
     }
-    return false
+    // return false
 }
 
 function handleSounds() {
@@ -439,14 +486,14 @@ function handleSounds() {
     if (isAI) {
         if (winner === 1) {
             winSound.play()
-            return endGame()
+            endGame()
         } else {
             loseSound.play()
-            return endGame()
+            endGame()
         }
     } else {
         winSound.play()
-        return endGame()
+        endGame()
     }
 }
 
@@ -472,7 +519,7 @@ function endGame() {
         left.classList.remove("active")
         left.classList.remove("dimmed")
     }
-    return false
+    // return false
 }
 
 // signature
